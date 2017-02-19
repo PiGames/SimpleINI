@@ -1,4 +1,4 @@
-# PiGames simple header-only INI file parser
+# PiGames C++ header-only INI file parser
 
 ### Usage example
 ```c++
@@ -7,6 +7,18 @@ pi::INIfile file;
 file.loadFromFile("MyINI.ini");
 file.parse();
 file.getString("MySection", "VarName");
+```
+### Syntax
+```ini
+; Comments start with ';'
+[SectionName]
+varName = value
+
+[AnotherSection]
+varBool = false
+varInt = 256;
+varDouble = 156.12657
+varString = It's delicious!
 ```
 
 ### License

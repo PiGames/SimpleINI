@@ -33,20 +33,22 @@ int main()
 	// ini_error_t is struct with std::string that contains information about error
 	pi::ini_error_t error;
 
-	if (!iniFile.loadFromFile("SampleFile.ini", &error))
+	// Checking if method failed, if yes then print error message.
+	if ( !iniFile.LoadFromFile( "SampleFile.ini", &error ) )
 		std::cout << "\n LOADING ERROR: " << error.what << "\n";
 
-	if(!iniFile.parse(&error))
+	// Same as above
+	if ( !iniFile.Parse( &error ) )
 		std::cout << "\n PARSE ERROR: " << error.what << "\n";
 
 
 
-	std::cout << "Player name (string): " << iniFile.getString("PLAYER_DATA", "name") << "\n";
-	std::cout << "Player score (int): " << iniFile.getInt("PLAYER_DATA", "score") << "\n";
-	// Enable bools printing (false instead of 0 and true instead of 1)
-	std::cout << std::boolalpha << "Does player visit tavern? (bool): " << iniFile.getBool("VISITED_PLACES", "tavern") << "\n";
-	std::cout << "Player X position (double): " << iniFile.getDouble("PLAYER_DATA", "positionX") << "\n";
-	std::cout << "Player Y position (double): " << iniFile.getDouble("PLAYER_DATA", "positionY") << "\n";
+	std::cout << "Player name (string): " << iniFile.GetString( "PLAYER_DATA", "name" ) << "\n";
+	std::cout << "Player score (int): " << iniFile.GetInt( "PLAYER_DATA", "score" ) << "\n";
+	// Enable bools printing ('false' instead '0' and 'true' instead '1')
+	std::cout << std::boolalpha << "Does player visit tavern? (bool): " << iniFile.GetBool( "VISITED_PLACES", "tavern" ) << "\n";
+	std::cout << "Player X position (double): " << iniFile.GetDouble( "PLAYER_DATA", "positionX" ) << "\n";
+	std::cout << "Player Y position (double): " << iniFile.GetDouble( "PLAYER_DATA", "positionY" ) << "\n";
 
 	std::cin.get();
 	return 0;
