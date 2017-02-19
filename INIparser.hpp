@@ -24,19 +24,6 @@
 
 #pragma once
 
-/*
-	Header-only Simple type INI file parser.
-	File should have following format:
-	[Section_Name]
-	varStr = My super_string!
-	; int values are stored as... int
-	varInt = 123
-	; only true or false
-	varBool = false
-	; only double type variables
-	varDoubleA = 1.23
-*/
-
 #include <algorithm>
 #include <fstream>
 #include <unordered_map>
