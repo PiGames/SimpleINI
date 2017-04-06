@@ -30,8 +30,8 @@ int main()
 {
 	pi::INIFile iniFile;
 	// In almost all methods pointer to error is additional argument (you don't need to use it)
-	// ini_error_t is struct with std::string that contains information about error
-	pi::ini_error_t error;
+	// INIError_t is struct with std::string that contains information about error
+	pi::INIError_t error;
 
 	// Checking if method failed, if yes then print error message.
 	if ( !iniFile.LoadFromFile( "SampleFile.ini", &error ) )
