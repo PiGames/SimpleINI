@@ -1,12 +1,12 @@
-# PiGames C++ header-only INI file parser
+# PiGames C++ simple INI file parser
 
 ### Usage example
 ```c++
 pi::INIfile file;
 
-file.loadFromFile("MyINI.ini");
-file.parse();
-file.getString("MySection", "VarName");
+file.LoadFromFile("MyINI.ini");
+file.Parse();
+file.GetString("MySection", "VarName");
 ```
 ### Syntax
 ```ini
