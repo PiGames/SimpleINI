@@ -54,7 +54,7 @@ namespace pi
 
 	===============================================================================
 	*/
-	class INIFile final
+	class INIFile 
 	{
 	public:
 		INIFile() :
@@ -66,6 +66,7 @@ namespace pi
 		bool IsParsed() const { return this->parsed; }
 
 		bool LoadFromFile( const std::string& path, INIError_t* errorOutput = nullptr );
+		bool SaveToFile( const std::string& path, const std::string& headerComment = "", INIError_t* errorOutput = nullptr );
 		bool Parse( INIError_t* errorOutput = nullptr );
 
 		void Clear();
@@ -74,6 +75,23 @@ namespace pi
 		int GetInt( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
 		double GetDouble( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
 		std::string GetString( const std::string& section, const std::string& name, INIError_t* errorOutput = nullptr );
+
+		void AddBool( const std::string& section, const std::string& name, bool data )
+		{
+			this->parsedBool[section][name] = data;
+		}
+		void AddInt( const std::string& section, const std::string& name, int data )
+		{
+			this->parsedInt[section][name] = data;
+		}
+		void AddDouble( const std::string& section, const std::string& name, double data )
+		{
+			this->parsedDouble[section][name] = data;
+		}
+		void AddString( const std::string& section, const std::string& name, const std::string& data )
+		{
+			this->parsedString[section][name] = data;
+		}
 
 	private:
 		bool loaded;
@@ -95,5 +113,12 @@ namespace pi
 		void removeBlanks( std::string& str );
 		void removeFirstBlanks( std::string& str );
 		void removeEscapeSeq( std::string& str );
+
+		void serialize( std::unordered_map<std::string, std::vector<std::string>>& data );
+
+		std::string getBoolAsString( bool val )
+		{
+			return ( val ) ? "true" : "false";
+		}
 	};
 }

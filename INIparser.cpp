@@ -2,7 +2,6 @@
 
 namespace pi
 {
-
 	bool INIFile::LoadFromFile( const std::string& path, INIError_t* errorOutput )
 	{
 		std::ifstream file( path );
@@ -32,6 +31,32 @@ namespace pi
 		}
 
 		this->loaded = true;
+		return true;
+	}
+
+	bool INIFile::SaveToFile( const std::string& path, const std::string& headerComment, INIError_t* errorOutput )
+	{
+		std::ofstream file( path );
+		if ( !file.good() )
+		{
+			if ( errorOutput )
+				errorOutput->what = "Unable to create file";
+			return false;
+		}
+		file << headerComment << '\n';
+		//				< section  name, 'var name = data' >
+		std::unordered_map<std::string, std::vector<std::string>> finalData;
+		this->serialize( finalData );
+
+		for ( auto& map : finalData )
+		{
+			file << "[" << map.first << "]\n";
+			for ( auto& line : map.second )
+				file << line << '\n';
+
+			file << '\n';
+		}
+
 		return true;
 	}
 
@@ -217,7 +242,6 @@ namespace pi
 		return this->parsedString[section][name];
 	}
 
-
 	bool INIFile::isInt( const std::string& value )
 	{
 		auto beginIterator = value.begin();
@@ -305,6 +329,60 @@ namespace pi
 			str.erase( i, 1 );
 			// i-- because if str have: "\n\n" the second \n would be passed 
 			i--;
+		}
+	}
+
+	void INIFile::serialize( std::unordered_map<std::string, std::vector<std::string>>& data )
+	{
+		std::string tempVarString;
+		std::vector<std::string> tempVarVector;
+
+		for(auto& str : this->parsedString )
+			{
+				tempVarVector.clear();
+				for ( auto& map : str.second )
+				{
+					tempVarString = map.first + " = " + map.second;
+					tempVarVector.push_back( tempVarString );
+				}
+				data[str.first].reserve( tempVarVector.size() );
+				data[str.first].insert( data[str.first].end(), tempVarVector.begin(), tempVarVector.end() );
+			}
+
+		for ( auto& intgr : this->parsedInt )
+			{
+				tempVarVector.clear();
+				for ( auto& map : intgr.second )
+				{
+					tempVarString = map.first + " = " + std::to_string( map.second );
+					tempVarVector.push_back( tempVarString );
+				}
+				data[intgr.first].reserve( tempVarVector.size() );
+				data[intgr.first].insert( data[intgr.first].end(), tempVarVector.begin(), tempVarVector.end() );
+		}
+
+		for ( auto& doubl : this->parsedDouble )
+			{
+				tempVarVector.clear();
+				for ( auto& map : doubl.second )
+				{
+					tempVarString = map.first + " = " + std::to_string( map.second );
+					tempVarVector.push_back( tempVarString );
+				}
+				data[doubl.first].reserve( tempVarVector.size() );
+				data[doubl.first].insert( data[doubl.first].end(), tempVarVector.begin(), tempVarVector.end() );
+		}
+
+		for ( auto& boolean : this->parsedBool )
+			{
+				tempVarVector.clear();
+				for ( auto& map : boolean.second )
+				{
+					tempVarString = map.first + " = " + this->getBoolAsString( map.second );
+					tempVarVector.push_back( tempVarString );
+				}
+				data[boolean.first].reserve( tempVarVector.size() );
+				data[boolean.first].insert( data[boolean.first].end(), tempVarVector.begin(), tempVarVector.end() );
 		}
 	}
 }
