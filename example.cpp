@@ -24,31 +24,28 @@
 
 #include <iostream>
 
-#include "INIparser.hpp"
+// Uncomment to use filesystem header for saving.
+//#define USE_CPP_17
+#include "INIFile.hpp"
 
 int main()
 {
 	pi::INIFile iniFile;
-	// In almost all methods pointer to error is additional argument (you don't need to use it)
-	// INIError_t is struct with std::string that contains information about error
-	pi::INIError_t error;
 
-	// Checking if method failed, if yes then print error message.
-	if ( !iniFile.LoadFromFile( "SampleFile.ini", &error ) )
-		std::cout << "\n LOADING ERROR: " << error.what << "\n";
+	if ( !iniFile.Open( "SampleFile.ini" ) ) {
+		std::cout << "Cannot open file\n";
+		std::cin.get();
+		return -1;
+	}
 
-	// Same as above
-	if ( !iniFile.Parse( &error ) )
-		std::cout << "\n PARSE ERROR: " << error.what << "\n";
+	iniFile.Parse();
 
-
-
-	std::cout << "Player name (string): " << iniFile.GetString( "PLAYER_DATA", "name" ) << "\n";
-	std::cout << "Player score (int): " << iniFile.GetInt( "PLAYER_DATA", "score" ) << "\n";
+	std::cout << "Player name: " << iniFile.GetValue( "PLAYER_DATA", "name" ) << "\n";
+	std::cout << "Player score: " << iniFile.GetValue( "PLAYER_DATA", "score" ) << "\n";
 	// Enable bools printing ('false' instead '0' and 'true' instead '1')
-	std::cout << std::boolalpha << "Does player visit tavern? (bool): " << iniFile.GetBool( "VISITED_PLACES", "tavern" ) << "\n";
-	std::cout << "Player X position (double): " << iniFile.GetDouble( "PLAYER_DATA", "positionX" ) << "\n";
-	std::cout << "Player Y position (double): " << iniFile.GetDouble( "PLAYER_DATA", "positionY" ) << "\n";
+	std::cout << std::boolalpha << "Does player visit tavern?: " << iniFile.GetValue( "VISITED_PLACES", "tavern" ) << "\n";
+	std::cout << "Player X position: " << iniFile.GetValue( "PLAYER_DATA", "positionX" ) << "\n";
+	std::cout << "Player Y position: " << iniFile.GetValue( "PLAYER_DATA", "positionY" ) << "\n";
 
 	std::cin.get();
 	return 0;
