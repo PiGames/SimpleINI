@@ -4,9 +4,10 @@
 ```c++
 pi::INIfile file;
 
-file.LoadFromFile("MyINI.ini");
+file.Open("MyINI.ini");
 file.Parse();
-file.GetString("MySection", "VarName");
+*file.GetValuePtr("MySection", "VarName") = "Value1";
+file.Save();
 ```
 ### Syntax
 ```ini
